@@ -1,0 +1,15 @@
+<!-- results.component.html -->
+<div class="results-container">
+  <h2>Quiz Results</h2>
+  <p>Your Score: {{ score }} / {{ totalQuestions }}</p>
+
+  <div class="feedback" *ngIf="score / totalQuestions >= 0.8">
+    <p>Excellent work! You really know your stuff!</p>
+  </div>
+  <div class="feedback" *ngIf="score / totalQuestions >= 0.5 && score / totalQuestions < 0.8">
+    <p>Good job! A little more practice and you’ll ace it.</p>
+  </div>
+  <div class="feedback" *ngIf="score / totalQuestions < 0.5">
+    <p>Don't worry, keep learning and try again!</p>
+  </div>
+</div>

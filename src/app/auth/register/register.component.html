@@ -1,0 +1,89 @@
+<div class="container mt-5">
+  <h2>Register</h2>
+  <form (ngSubmit)="onSubmit()" [formGroup]="registerForm" novalidate>
+    <!-- Username Field -->
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input
+        type="text"
+        id="username"
+        formControlName="username"
+        class="form-control"
+        placeholder="Enter username"
+        [ngClass]="{ 'is-invalid': submitted && registerForm.controls['username'].errors }"
+        aria-describedby="usernameError"
+      />
+      <div *ngIf="submitted && registerForm.controls['username'].errors" id="usernameError" class="invalid-feedback">
+        <div *ngIf="registerForm.controls['username'].errors?.['required']">Username is required</div>
+      </div>
+    </div>
+
+    <!-- Name Field -->
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input
+        type="text"
+        id="name"
+        formControlName="name"
+        class="form-control"
+        placeholder="Enter name"
+        [ngClass]="{ 'is-invalid': submitted && registerForm.controls['name'].errors }"
+        aria-describedby="nameError"
+      />
+      <div *ngIf="submitted && registerForm.controls['name'].errors" id="nameError" class="invalid-feedback">
+        <div *ngIf="registerForm.controls['name'].errors?.['required']">Name is required</div>
+      </div>
+    </div>
+
+
+    <!-- Email Field -->
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        class="form-control"
+        placeholder="Enter email"
+        [ngClass]="{ 'is-invalid': submitted && registerForm.controls['email'].errors }"
+        aria-describedby="emailError"
+      />
+      <div *ngIf="submitted && registerForm.controls['email'].errors" id="emailError" class="invalid-feedback">
+        <div *ngIf="registerForm.controls['email'].errors?.['required']">Email is required</div>
+        <div *ngIf="registerForm.controls['email'].errors?.['email']">Enter a valid email</div>
+      </div>
+    </div>
+
+    <!-- Password Field -->
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        formControlName="password"
+        class="form-control"
+        placeholder="Enter password"
+        [ngClass]="{ 'is-invalid': submitted && registerForm.controls['password'].errors }"
+        aria-describedby="passwordError"
+      />
+      <div *ngIf="submitted && registerForm.controls['password'].errors" id="passwordError" class="invalid-feedback">
+        <div *ngIf="registerForm.controls['password'].errors?.['required']">Password is required</div>
+        <div *ngIf="registerForm.controls['password'].errors?.['minlength']">Password must be at least 6 characters</div>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary mt-3" [disabled]="registerForm.invalid || loading">
+      Register
+      <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    </button>
+
+    <div *ngIf="registrationError" class="alert alert-danger mt-3">
+      {{ registrationError }}
+    </div>
+
+    <div class="text-center mt-3">
+      <p>Already have an account? <a [routerLink]="['/login']">Log in here</a></p>
+    </div>
+  </form>
+</div>

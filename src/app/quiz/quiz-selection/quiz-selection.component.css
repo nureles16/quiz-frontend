@@ -1,0 +1,44 @@
+.container {
+  margin: auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #007bff;
+}
+
+#subject{
+  width: 15%;
+}
+
+.subject-filter {
+  margin-bottom: 20px;
+}
+
+.quiz-card {
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/*button {*/
+/*  width: 30%;*/
+/*}*/
+
+button {
+  width: auto; /* Allow buttons to size based on content */
+  margin-top: 10px; /* Spacing above buttons */
+}
+
+.quiz-card:hover {
+  background-color: #f1f1f1; /* Light gray background on hover */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+}

@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "subject": "Math",
+    "title": "Math Basics",
+    "description": "Covers fundamental math principles"
+  },
+  {
+    "id": 2,
+    "subject": "Science",
+    "title": "Introduction to Physics",
+    "description": "Basic concepts in physics"
+  },
+  {
+    "id": 3,
+    "subject": "History",
+    "title": "World History 101",
+    "description": "A primer on significant historical events"
+  }
+]

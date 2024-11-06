@@ -1,0 +1,29 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <h2 class="text-center mb-4">Select a Quiz</h2>
+
+      <div class="subject-filter mb-4">
+        <label for="subject">Select a Subject:</label>
+        <select id="subject" (change)="onSelectSubject($event)" class="form-control">
+          <option value="">All Subjects</option>
+          <option *ngFor="let quiz of quizzes" [value]="quiz.subject">{{ quiz.subject }}</option>
+        </select>
+      </div>
+
+      <div class="row quiz-grid">
+        <div
+          *ngFor="let quiz of quizzes"
+          class="col-md-4 mb-4"
+          [hidden]="selectedSubject && quiz.subject !== selectedSubject"
+        >
+          <div class="quiz-card p-3">
+            <h3>{{ quiz.title }}</h3>
+            <p>{{ quiz.description }}</p>
+            <button (click)="startQuiz(quiz.id)" class="btn btn-primary btn-block">Start Quiz</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
