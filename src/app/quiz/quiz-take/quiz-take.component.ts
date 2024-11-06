@@ -21,15 +21,16 @@ export class QuizTakeComponent implements OnInit, OnDestroy {
   timeLeft: number = 50; // Set your quiz duration in seconds (e.g., 5 minutes = 300 seconds)
   userId: number = 1;
 
-  constructor(private quizService: QuizService, private router: Router) {}
+  constructor(private quizService: QuizService, private router: Router,private route: ActivatedRoute) {}
 
   ngOnInit() {
-    const quizId = 1; // Replace with the actual quiz ID
-    this.questions = this.quizService.getQuestions(quizId);
-
-    // Start the countdown timer
-    this.startTimer();
+    this.route.paramMap.subscribe(params => {
+      const quizId = +params.get('quizId')!;
+      this.questions = this.quizService.getQuestions(quizId); // Fetches questions based on the selected quiz
+      this.startTimer();
+    });
   }
+
 
   ngOnDestroy() {
     clearInterval(this.timer); // Clear the timer when component is destroyed

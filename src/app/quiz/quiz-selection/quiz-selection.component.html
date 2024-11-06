@@ -5,11 +5,12 @@
 
       <div class="subject-filter mb-4">
         <label for="subject">Select a Subject:</label>
-        <select id="subject" (change)="onSelectSubject($event)" class="form-control">
+        <select id="subject" [(ngModel)]="selectedSubject" class="form-control" (ngModelChange)="filterQuizzes()">
           <option value="">All Subjects</option>
-          <option *ngFor="let quiz of quizzes" [value]="quiz.subject">{{ quiz.subject }}</option>
+          <option *ngFor="let subject of uniqueSubjects" [value]="subject">{{ subject }}</option>
         </select>
       </div>
+
 
       <div class="row quiz-grid">
         <div
