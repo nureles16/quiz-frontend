@@ -16,25 +16,24 @@ import {DatePipe, NgForOf} from "@angular/common";
 })
 
 export class ProfileComponent implements OnInit {
-  user: any; // Replace with your user model
+  user: any;
   quizHistory: any[] = [];
   totalQuizzes: number = 0;
 
   constructor(private userService: UserService, private quizService: QuizService, private router: Router) {}
 
   ngOnInit(): void {
-    this.user = this.userService.getCurrentUser(); // Fetch current user data
-    this.quizHistory = this.quizService.getUserQuizHistory(this.user.id); // Fetch quiz history
+    this.user = this.userService.getCurrentUser();
+    this.quizHistory = this.quizService.getUserQuizHistory(this.user.id);
     this.totalQuizzes = this.quizHistory.length;
   }
 
   editProfile(): void {
-    // Navigate to edit profile page
     this.router.navigate(['/edit-profile']);
   }
 
   logout(): void {
-    this.userService.logout(); // Implement your logout logic
-    this.router.navigate(['/login']); // Redirect to login page
+    this.userService.logout();
+    this.router.navigate(['/login']);
   }
 }

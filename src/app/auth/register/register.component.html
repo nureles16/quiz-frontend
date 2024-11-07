@@ -1,7 +1,6 @@
 <div class="container mt-5">
   <h2>Register</h2>
   <form (ngSubmit)="onSubmit()" [formGroup]="registerForm" novalidate>
-    <!-- Username Field -->
     <div class="form-group">
       <label for="username">Username</label>
       <input
@@ -18,7 +17,6 @@
       </div>
     </div>
 
-    <!-- Name Field -->
     <div class="form-group">
       <label for="name">Name</label>
       <input
@@ -36,7 +34,6 @@
     </div>
 
 
-    <!-- Email Field -->
     <div class="form-group">
       <label for="email">Email</label>
       <input
@@ -54,7 +51,6 @@
       </div>
     </div>
 
-    <!-- Password Field -->
     <div class="form-group">
       <label for="password">Password</label>
       <input
@@ -72,7 +68,6 @@
       </div>
     </div>
 
-    <!-- Submit Button -->
     <button type="submit" class="btn btn-primary mt-3" [disabled]="registerForm.invalid || loading">
       Register
       <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>

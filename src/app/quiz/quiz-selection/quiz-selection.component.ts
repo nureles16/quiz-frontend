@@ -18,7 +18,7 @@ import {FormsModule} from "@angular/forms";
 export class QuizSelectionComponent implements OnInit {
   selectedSubject: string = '';
   public quizzes: any;
-  uniqueSubjects: string[] = []; // Declare uniqueSubjects here
+  uniqueSubjects: string[] = [];
   filteredQuizzes: Quiz[] = [];
 
   constructor(private quizService: QuizService, private router: Router) {}
@@ -27,7 +27,6 @@ export class QuizSelectionComponent implements OnInit {
     this.quizzes = this.quizService.getQuizzes();
     this.uniqueSubjects = Array.from(new Set(this.quizzes.map((quiz: { subject: any; }) => quiz.subject)));
 
-    // Initialize filtered quizzes to show all by default
     this.filteredQuizzes = this.quizzes;
   }
 
@@ -39,11 +38,10 @@ export class QuizSelectionComponent implements OnInit {
   filterQuizzes(): void {
     this.filteredQuizzes = this.selectedSubject
       ? this.quizzes.filter((quiz: { subject: string; }) => quiz.subject === this.selectedSubject)
-      : this.quizzes;  // If no subject is selected, show all quizzes
+      : this.quizzes;
   }
 
   startQuiz(quizId: number): void {
-// Navigate to the quiz with the specified ID
-    this.router.navigate([`/quiz`, quizId]);  // Pass quizId as a parameter
+    this.router.navigate([`/quiz`, quizId]);
   }
 }

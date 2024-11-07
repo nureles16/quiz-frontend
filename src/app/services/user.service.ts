@@ -5,10 +5,9 @@ import { Injectable } from '@angular/core';
 })
 
 export class UserService {
-  private user: any; // Replace with your user model
+  private user: any;
 
   constructor() {
-    // This would typically come from an API or local storage
     this.user = {
       id: 1,
       name: 'Nureles',
@@ -21,11 +20,9 @@ export class UserService {
   }
 
   updateUser(updatedUser: any) {
-    this.user = { ...updatedUser }; // Update the user with new information
-    // Implement logic to save the updated user to a database or local storage if needed
+    this.user = { ...updatedUser };
   }
 
   logout() {
-    // Your logout logic here
   }
 }

@@ -31,7 +31,7 @@ import {MatButton} from "@angular/material/button";
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   submitted = false;
-  errorMessage: string | null = null; // Property to hold error messages
+  errorMessage: string | null = null;
   loading = false;
 
 
@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
         },
         (error) => {
           this.loading = false;
-          this.errorMessage = error.message || 'Invalid username or password'; // Display error on UI without logging to console
+          this.errorMessage = error.message || 'Invalid username or password';
         }
       );
     }

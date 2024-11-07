@@ -15,15 +15,15 @@ import {Router} from "@angular/router";
 
 export class ResultsComponent implements OnInit {
   selectedAnswers: { [questionId: number]: string } = {};
-  quizId: number = 1; // Default to 1 or another appropriate fallback
+  quizId: number = 1;
   score: number = 0;
   totalQuestions: number = 0;
 
   constructor(private quizService: QuizService, private router: Router) {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as { selectedAnswers: any; quizId: number } | undefined;
-    this.selectedAnswers = state?.selectedAnswers || {}; // Use empty object if undefined
-    this.quizId = state?.quizId ?? 1; // Default quizId to 1 if undefined
+    this.selectedAnswers = state?.selectedAnswers || {};
+    this.quizId = state?.quizId ?? 1;
   }
 
   ngOnInit() {

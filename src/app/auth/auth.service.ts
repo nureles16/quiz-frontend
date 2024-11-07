@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, catchError, map, Observable, of, throwError} from "rxjs";
+import {BehaviorSubject, catchError, map, Observable, throwError} from "rxjs";
 import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 
 export interface User {
@@ -31,12 +31,11 @@ export class AuthService {
     return this.http.post<{ message: string }>(`${this.apiUrl}/register`, user, { headers }).pipe(
       map(response => response.message),
       catchError((error) => {
-        // Customize error messages based on status code or error details
         let errorMessage = 'Registration failed; please try again.';
         if (error.status === 400) {
           errorMessage = 'This email or username is already registered.';
         }
-        return throwError(() => new Error(errorMessage)); // Pass error message without logging
+        return throwError(() => new Error(errorMessage));
       })
     );
   }
@@ -56,7 +55,6 @@ export class AuthService {
         return 'Login successful';
       }),
       catchError((error: HttpErrorResponse) => {
-        // Customize the error message without logging
         const errorMessage = error.error.message || 'Invalid username or password';
         return throwError(() => new Error(errorMessage));
       })

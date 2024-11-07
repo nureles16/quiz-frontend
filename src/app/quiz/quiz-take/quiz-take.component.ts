@@ -17,8 +17,8 @@ export class QuizTakeComponent implements OnInit, OnDestroy {
   questions: any[] = [];
   currentQuestionIndex: number = 0;
   selectedAnswers: { [questionId: number]: string } = {};
-  timer: any; // To hold setInterval reference
-  timeLeft: number = 50; // Set your quiz duration in seconds (e.g., 5 minutes = 300 seconds)
+  timer: any;
+  timeLeft: number = 100;
   userId: number = 1;
 
   constructor(private quizService: QuizService, private router: Router,private route: ActivatedRoute) {}
@@ -26,14 +26,14 @@ export class QuizTakeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       const quizId = +params.get('quizId')!;
-      this.questions = this.quizService.getQuestions(quizId); // Fetches questions based on the selected quiz
+      this.questions = this.quizService.getQuestions(quizId);
       this.startTimer();
     });
   }
 
 
   ngOnDestroy() {
-    clearInterval(this.timer); // Clear the timer when component is destroyed
+    clearInterval(this.timer);
   }
 
   startTimer() {
@@ -41,7 +41,7 @@ export class QuizTakeComponent implements OnInit, OnDestroy {
       if (this.timeLeft > 0) {
         this.timeLeft--;
       } else {
-        this.submitQuiz(); // Submit quiz when time is up
+        this.submitQuiz();
       }
     }, 1000);
   }
@@ -69,7 +69,7 @@ export class QuizTakeComponent implements OnInit, OnDestroy {
   }
 
   submitQuiz() {
-    clearInterval(this.timer); // Stop the timer when the quiz is submitted
+    clearInterval(this.timer);
     const score = this.calculateScore();
     const quizResult = {
       quizId: 1,
@@ -78,7 +78,6 @@ export class QuizTakeComponent implements OnInit, OnDestroy {
       selectedAnswers: this.selectedAnswers
     };
 
-    // Submit quiz result to the backend
     this.quizService.submitQuizResult(this.userId, quizResult).subscribe(
       (response) => {
         console.log('Quiz result saved successfully:', response);
@@ -94,7 +93,6 @@ export class QuizTakeComponent implements OnInit, OnDestroy {
 
   calculateScore(): number {
     let score = 0;
-    // Loop through each question to calculate the score
     this.questions.forEach((question) => {
       if (this.selectedAnswers[question.id] === question.correctAnswer) {
         score++;
@@ -109,7 +107,7 @@ export class QuizTakeComponent implements OnInit, OnDestroy {
   }
 
   cancelQuiz() {
-    this.selectedAnswers = {}; // Clear selected answers
-    this.router.navigate(['/quiz-selection']); // Navigate back to quiz selection page
+    this.selectedAnswers = {};
+    this.router.navigate(['/quiz-selection']);
   }
 }

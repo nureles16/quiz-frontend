@@ -23,7 +23,6 @@ export class QuizService {
     return this.http.get(url);
   }
 
-  // Example method in quiz.service.ts
   calculateScore(selectedAnswers: { [questionId: number]: string }, quizId: number): { score: number; total: number } {
     const questions = this.getQuestions(quizId);
     let score = 0;
@@ -41,12 +40,10 @@ export class QuizService {
   private quizHistory: any[] = [
     { title: 'Math Quiz', score: 85, date: new Date() },
     { title: 'Science Quiz', score: 90, date: new Date() },
-    // Add more quiz history as needed
   ];
 
   getUserQuizHistory(userId: number) {
-    // Filter or fetch quiz history for the specific user
-    return this.quizHistory; // Replace with actual fetching logic
+    return this.quizHistory;
   }
   getQuizzes() {
     return [

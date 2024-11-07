@@ -27,7 +27,6 @@ export class HomeComponent {
 
   logout() {
     this.authService.logout();
-    // Optionally navigate to the login page after logout
     this.router.navigate(['/login']);
   }
 }
