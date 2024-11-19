@@ -70,35 +70,29 @@ export class QuizTakeComponent implements OnInit, OnDestroy {
 
   submitQuiz() {
     clearInterval(this.timer);
+
+    if (Object.keys(this.selectedAnswers).length < this.questions.length) {
+      alert('Please answer all questions before submitting.');
+      return;
+    }
+
+    const quizId = +this.route.snapshot.paramMap.get('quizId')!;
     const score = this.calculateScore();
     const quizResult = {
-      quizId: 1,
-      score: score,
+      quizId,
+      userId: this.userId,
+      score,
       totalQuestions: this.questions.length,
-      selectedAnswers: this.selectedAnswers
+      selectedAnswers: this.selectedAnswers,
     };
+    this.router.navigate(['/results'], { state: quizResult });
 
-    this.quizService.submitQuizResult(this.userId, quizResult).subscribe(
-      (response) => {
-        console.log('Quiz result saved successfully:', response);
-        this.router.navigate(['/results'], {
-          state: { selectedAnswers: this.selectedAnswers, quizId: 1 }
-        });
-      },
-      (error) => {
-        console.error('Error submitting quiz result:', error);
-      }
-    );
   }
 
   calculateScore(): number {
-    let score = 0;
-    this.questions.forEach((question) => {
-      if (this.selectedAnswers[question.id] === question.correctAnswer) {
-        score++;
-      }
-    });
-    return score;
+    return this.questions.reduce((score, question) => {
+      return this.selectedAnswers[question.id] === question.answer ? score + 1 : score;
+    }, 0);
   }
 
   resetCurrentQuestion() {

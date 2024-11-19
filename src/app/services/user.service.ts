@@ -1,28 +1,24 @@
 import { Injectable } from '@angular/core';
+import {BehaviorSubject} from "rxjs";
+import {User} from "../auth/auth.service";
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class UserService {
-  private user: any;
+  private userSubject = new BehaviorSubject<User | null>(null);
+  user$ = this.userSubject.asObservable();
 
-  constructor() {
-    this.user = {
-      id: 1,
-      name: 'Nureles',
-      email: 'john.doe@example.com',
-    };
+  getCurrentUser(): User | null {
+    return this.userSubject.value;
   }
 
-  getCurrentUser() {
-    return { ...this.user };
+  updateUser(user: User): void {
+    this.userSubject.next(user);
   }
 
-  updateUser(updatedUser: any) {
-    this.user = { ...updatedUser };
-  }
-
-  logout() {
+  logout(): void {
+    this.userSubject.next(null);
   }
 }

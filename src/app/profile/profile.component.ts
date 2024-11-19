@@ -3,6 +3,7 @@ import {QuizService} from "../services/quiz.service";
 import {Router} from "@angular/router";
 import {UserService} from "../services/user.service";
 import {DatePipe, NgForOf} from "@angular/common";
+import {User} from "../auth/auth.service";
 
 @Component({
   selector: 'app-profile',
@@ -34,6 +35,11 @@ export class ProfileComponent implements OnInit {
 
   logout(): void {
     this.userService.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/quiz-selection']);
+  }
+
+  deleteQuiz(index: number): void {
+    this.quizHistory.splice(index, 1);
+    this.totalQuizzes = this.quizHistory.length;
   }
 }

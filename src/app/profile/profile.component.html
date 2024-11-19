@@ -18,10 +18,11 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let quiz of quizHistory">
+      <tr *ngFor="let quiz of quizHistory; let i = index">
         <td>{{ quiz.title }}</td>
         <td>{{ quiz.score }}</td>
         <td>{{ quiz.date | date: 'shortDate' }}</td>
+        <td style="width: 15%"><button class="delete-btn" (click)="deleteQuiz(i)">Delete</button></td>
       </tr>
       </tbody>
     </table>
@@ -29,6 +30,6 @@
 
   <div class="button-group">
     <button (click)="editProfile()">Edit Profile</button>
-    <button (click)="logout()">Logout</button>
+    <button (click)="logout()">Select Quiz</button>
   </div>
 </div>

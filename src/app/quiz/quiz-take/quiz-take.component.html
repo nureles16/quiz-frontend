@@ -2,34 +2,41 @@
   <h2>Quiz</h2>
   <div class="timer">Time Left: {{ formatTime(timeLeft) }}</div>
 
-  <div class="quiz-card" *ngIf="questions.length > 0">
-    <h3>{{ questions[currentQuestionIndex].question }}</h3>
+  <div *ngIf="questions.length > 0; else noQuestions">
+    <div class="quiz-card">
+      <h3>{{ questions[currentQuestionIndex].question }}</h3>
 
-    <div *ngFor="let option of questions[currentQuestionIndex].options">
-      <label>
-        <input
-          type="radio"
-          name="answer"
-          [value]="option"
-          (change)="selectAnswer(questions[currentQuestionIndex].id, option)"
-          [checked]="selectedAnswers[questions[currentQuestionIndex].id] === option"
-        />
-        {{ option }}
-      </label>
-    </div>
+      <div *ngFor="let option of questions[currentQuestionIndex].options">
+        <label>
+          <input
+            type="radio"
+            name="answer"
+            [value]="option"
+            (change)="selectAnswer(questions[currentQuestionIndex].id, option)"
+            [checked]="selectedAnswers[questions[currentQuestionIndex].id] === option"
+          />
+          {{ option }}
+        </label>
+      </div>
 
-    <div class="button-group">
-      <button (click)="goToPreviousQuestion()" [disabled]="currentQuestionIndex === 0">Previous</button>
-      <button (click)="resetCurrentQuestion()" [disabled]="selectedAnswers === {}" class="btn btn-secondary">Reset</button>
-      <button (click)="goToNextQuestion()" [disabled]="currentQuestionIndex === questions.length - 1">Next</button>
-    </div>
-    <div class="button-group">
-      <button (click)="cancelQuiz()" class="btn btn-secondary">Cancel</button>
-      <button (click)="submitQuiz()">Submit</button>
+      <div class="button-group">
+        <button (click)="goToPreviousQuestion()" [disabled]="currentQuestionIndex === 0">Previous</button>
+        <button (click)="resetCurrentQuestion()" [disabled]="!selectedAnswers[questions[currentQuestionIndex].id]">
+          Reset
+        </button>
+        <button (click)="goToNextQuestion()" [disabled]="currentQuestionIndex === questions.length - 1">Next</button>
+      </div>
+      <div class="button-group">
+        <button (click)="cancelQuiz()">Cancel</button>
+        <button (click)="submitQuiz()">Submit</button>
+      </div>
     </div>
   </div>
 
-  <div *ngIf="questions.length === 0" class="no-questions">
-    <p>No questions available for this quiz.</p>
-  </div>
+  <ng-template #noQuestions>
+    <div class="no-questions">
+      <p>No questions available for this quiz.</p>
+      <button (click)="cancelQuiz()">Go Back</button>
+    </div>
+  </ng-template>
 </div>
