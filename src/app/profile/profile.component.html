@@ -2,8 +2,8 @@
   <h2>User Profile</h2>
 
   <div class="profile-info">
-    <h3>{{ user.name }}</h3>
-    <p>Email: {{ user.email }}</p>
+    <h3>{{ user?.name }}</h3>
+    <p>Email: {{ user?.email }}</p>
     <p>Total Quizzes Taken: {{ totalQuizzes }}</p>
   </div>
 
@@ -22,7 +22,9 @@
         <td>{{ quiz.title }}</td>
         <td>{{ quiz.score }}</td>
         <td>{{ quiz.date | date: 'shortDate' }}</td>
-        <td style="width: 15%"><button class="delete-btn" (click)="deleteQuiz(i)">Delete</button></td>
+        <td style="width: 15%">
+          <button class="delete-btn" (click)="deleteQuiz(i)">Delete</button>
+        </td>
       </tr>
       </tbody>
     </table>

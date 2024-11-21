@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, catchError, map, Observable, throwError} from "rxjs";
 import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
+import {UserService} from "../services/user.service";
 
 export interface User {
+  id: number;
   name: string;
   username: string;
   email: string;
@@ -23,7 +25,8 @@ export class AuthService {
   isLoggedIn$ = this.loggedIn.asObservable();
 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+              private  userService: UserService) {}
 
   register(user: User): Observable<string> {
     this.loggedIn.next(false);
@@ -48,10 +51,11 @@ export class AuthService {
     }
 
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, { username, password }, { headers }).pipe(
+    return this.http.post<{ token: string, user: User }>(`${this.apiUrl}/login`, { username, password }, { headers }).pipe(
       map(response => {
         this.token = response.token;
         this.isLoggedIn = true;
+        this.userService.updateUser(response.user);
         return 'Login successful';
       }),
       catchError((error: HttpErrorResponse) => {

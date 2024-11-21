@@ -17,7 +17,7 @@ import {User} from "../auth/auth.service";
 })
 
 export class ProfileComponent implements OnInit {
-  user: any;
+  user: User | null = null;
   quizHistory: any[] = [];
   totalQuizzes: number = 0;
 
@@ -25,8 +25,10 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.userService.getCurrentUser();
+    if (this.user) {
     this.quizHistory = this.quizService.getUserQuizHistory(this.user.id);
     this.totalQuizzes = this.quizHistory.length;
+    }
   }
 
   editProfile(): void {
