@@ -29,16 +29,12 @@ h2 {
   text-align: center;
 }
 
-/*button {*/
-/*  width: 30%;*/
-/*}*/
-
 button {
-  width: auto; /* Allow buttons to size based on content */
-  margin-top: 10px; /* Spacing above buttons */
+  width: auto;
+  margin-top: 10px;
 }
 
 .quiz-card:hover {
-  background-color: #f1f1f1; /* Light gray background on hover */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+  background-color: #f1f1f1;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }

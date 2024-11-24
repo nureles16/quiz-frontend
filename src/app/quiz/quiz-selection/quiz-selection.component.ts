@@ -21,18 +21,13 @@ export class QuizSelectionComponent implements OnInit {
   uniqueSubjects: string[] = [];
   filteredQuizzes: Quiz[] = [];
 
-  constructor(private quizService: QuizService, private router: Router) {}
+  constructor(private quizService: QuizService,
+              private router: Router) {}
 
   ngOnInit(): void {
     this.quizzes = this.quizService.getQuizzes();
     this.uniqueSubjects = Array.from(new Set(this.quizzes.map((quiz: { subject: any; }) => quiz.subject)));
-
     this.filteredQuizzes = this.quizzes;
-  }
-
-  onSelectSubject(event: Event): void {
-    const target = event.target as HTMLSelectElement;
-    this.selectedSubject = target.value;
   }
 
   filterQuizzes(): void {
@@ -41,7 +36,7 @@ export class QuizSelectionComponent implements OnInit {
       : this.quizzes;
   }
 
-  startQuiz(quizId: number): void {
-    this.router.navigate([`/quiz`, quizId]);
+  startQuiz(id: number): void {
+    this.router.navigate([`/quiz`, id]);
   }
 }

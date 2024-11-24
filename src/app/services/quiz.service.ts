@@ -1,21 +1,32 @@
 import { Injectable } from '@angular/core';
-import {Observable} from "rxjs";
+import {catchError, Observable, throwError} from "rxjs";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuizService {
-  private apiUrl = 'http://localhost:8080/api/quiz-results';
+  private apiUrl = 'http://localhost:8080/api/quiz-results/submit';
   constructor(private http: HttpClient) {}
 
-  submitQuizResult(userId: number, quizResult: any): Observable<any> {
-    const url = `${this.apiUrl}/submit?userId=${userId}`;
-    return this.http.post(url, quizResult, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
+  submitQuizResult(quizResult: any): Observable<any> {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('No token found in localStorage.');
+      return throwError(() => new Error('User is not authenticated.'));
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
     });
+
+    return this.http.post(this.apiUrl, quizResult, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error submitting quiz result:', error);
+        return throwError(() => new Error('Failed to submit quiz result.'));
+      })
+    );
   }
 
   getQuizResultsByUser(userId: number): Observable<any> {
@@ -23,8 +34,8 @@ export class QuizService {
     return this.http.get(url);
   }
 
-  calculateScore(selectedAnswers: { [questionId: number]: string }, quizId: number): { score: number; total: number } {
-    const questions = this.getQuestions(quizId);
+  calculateScore(selectedAnswers: { [questionId: number]: string }, id: number): { score: number; total: number } {
+    const questions = this.getQuestions(id);
     let score = 0;
 
     questions.forEach((question) => {
@@ -54,7 +65,7 @@ export class QuizService {
     ];
   }
 
-  getQuestions(quizId: number) {
+  getQuestions(id: number) {
     const questions: Record<number, { id: number; question: string; options: string[]; answer: string }[]> = {
       1: [
         { id: 101, question: 'What is 2 + 2?', options: ['2', '3', '4', '5'], answer: '4' },
@@ -97,6 +108,6 @@ export class QuizService {
         { id: 402, question: 'What year did World War II end?', options: ['1945', '1939', '1918', '1941'], answer: '1945' }
       ]
     };
-    return questions[quizId];
+    return questions[id];
   }
 }

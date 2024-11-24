@@ -21,7 +21,9 @@ export class ProfileComponent implements OnInit {
   quizHistory: any[] = [];
   totalQuizzes: number = 0;
 
-  constructor(private userService: UserService, private quizService: QuizService, private router: Router) {}
+  constructor(private userService: UserService,
+              private quizService: QuizService,
+              private router: Router) {}
 
   ngOnInit(): void {
     this.user = this.userService.getCurrentUser();

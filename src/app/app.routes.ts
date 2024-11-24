@@ -12,7 +12,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'quiz-selection', component: QuizSelectionComponent },
-  { path: 'quiz/:quizId', component: QuizTakeComponent },
+  { path: 'quiz/:id', component: QuizTakeComponent },
   { path: 'results', component: ResultsComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'edit-profile', component: EditProfileComponent },

@@ -15,19 +15,19 @@ import {Router} from "@angular/router";
 
 export class ResultsComponent implements OnInit {
   selectedAnswers: { [questionId: number]: string } = {};
-  quizId: number = 1;
+  id: number = 1;
   score: number = 0;
   totalQuestions: number = 0;
 
   constructor(private quizService: QuizService, private router: Router) {
     const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras.state as { selectedAnswers: any; quizId: number } | undefined;
+    const state = navigation?.extras.state as { selectedAnswers: any; id: number } | undefined;
     this.selectedAnswers = state?.selectedAnswers || {};
-    this.quizId = state?.quizId ?? 1;
+    this.id = state?.id ?? 1;
   }
 
   ngOnInit() {
-    const result = this.quizService.calculateScore(this.selectedAnswers, this.quizId);
+    const result = this.quizService.calculateScore(this.selectedAnswers, this.id);
     this.score = result.score;
     this.totalQuestions = result.total;
   }

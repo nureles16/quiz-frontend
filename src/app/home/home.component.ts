@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink} from "@angular/router";
 import {AuthService} from "../auth/auth.service";
 import {NgIf} from "@angular/common";
@@ -13,7 +13,7 @@ import {NgIf} from "@angular/common";
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit{
   isLoggedIn: boolean = false;
 
   constructor(private authService: AuthService,

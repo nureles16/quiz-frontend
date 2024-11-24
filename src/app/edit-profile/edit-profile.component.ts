@@ -17,7 +17,8 @@ export class EditProfileComponent implements OnInit {
   user: any;
   originalUser: any;
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(private userService: UserService,
+              private router: Router) {}
 
   ngOnInit(): void {
     this.user = this.userService.getCurrentUser();

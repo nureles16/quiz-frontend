@@ -11,8 +11,6 @@ export interface User {
   password: string;
 }
 
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -23,7 +21,6 @@ export class AuthService {
   private apiUrl = 'http://localhost:8080/api/auth';
   private loggedIn = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.loggedIn.asObservable();
-
 
   constructor(private http: HttpClient,
               private  userService: UserService) {}
@@ -43,7 +40,6 @@ export class AuthService {
     );
   }
 
-
   login(username: string, password: string): Observable<string> {
     this.loggedIn.next(true);
     if (!username || !password) {
@@ -54,6 +50,7 @@ export class AuthService {
     return this.http.post<{ token: string, user: User }>(`${this.apiUrl}/login`, { username, password }, { headers }).pipe(
       map(response => {
         this.token = response.token;
+        localStorage.setItem('token', response.token);
         this.isLoggedIn = true;
         this.userService.updateUser(response.user);
         return 'Login successful';
@@ -65,23 +62,10 @@ export class AuthService {
     );
   }
 
-
-  setLoginState(state: boolean) {
-    this.loggedIn.next(state);
-  }
-
   logout(): void {
     this.isLoggedIn = false;
     this.token = null;
     this.loggedIn.next(false);
-    console.log('User logged out');
-  }
-
-  getToken(): string | null {
-    return this.token;
-  }
-
-  isAuthenticated(): boolean {
-    return this.isLoggedIn;
+    localStorage.removeItem('token');
   }
 }

@@ -21,12 +21,14 @@ export class QuizTakeComponent implements OnInit, OnDestroy {
   timeLeft: number = 100;
   userId: number = 1;
 
-  constructor(private quizService: QuizService, private router: Router,private route: ActivatedRoute) {}
+  constructor(private quizService: QuizService,
+              private router: Router,
+              private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
-      const quizId = +params.get('quizId')!;
-      this.questions = this.quizService.getQuestions(quizId);
+      const id = +params.get('id')!;
+      this.questions = this.quizService.getQuestions(id);
       this.startTimer();
     });
   }
@@ -76,17 +78,29 @@ export class QuizTakeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const quizId = +this.route.snapshot.paramMap.get('quizId')!;
+    const id = this.route.snapshot.paramMap.get('id')!;
     const score = this.calculateScore();
     const quizResult = {
-      quizId,
+      id: id,
       userId: this.userId,
-      score,
+      score: score,
       totalQuestions: this.questions.length,
       selectedAnswers: this.selectedAnswers,
     };
     this.router.navigate(['/results'], { state: quizResult });
-
+    this.quizService.submitQuizResult(quizResult).subscribe(
+      response => {
+        console.log('Quiz result saved successfully:', response);
+        this.router.navigate(['/results'], { state: response });
+      },
+      error => {
+        console.error('Error saving quiz result:', error);
+        if (error.status === 401) {
+          alert('Your session has expired. Please log in again.');
+          this.router.navigate(['/login']);
+        }
+      }
+    );
   }
 
   calculateScore(): number {

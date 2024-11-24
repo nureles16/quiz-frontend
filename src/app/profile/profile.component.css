@@ -56,13 +56,13 @@ button:hover {
 }
 
 .delete-btn {
-  background-color: #dc3545; /* Red color */
+  background-color: #dc3545;
   color: white;
   border-radius: 5px;
   cursor: pointer;
 }
 
 .delete-btn:hover {
-  background-color: #c82333; /* Darker red on hover */
+  background-color: #c82333;
 }
 

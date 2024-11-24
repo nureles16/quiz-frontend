@@ -46,13 +46,13 @@ input[type="radio"] {
 }
 
 button {
-  width: 20%; /* Reduced width */
+  width: 20%;
   padding: 8px;
   border: none;
   border-radius: 5px;
   background-color: #007bff;
   color: #fff;
-  font-size: 1.1rem; /* Larger text */
+  font-size: 1.1rem;
   cursor: pointer;
 }
 
@@ -72,7 +72,7 @@ button:hover:not(:disabled) {
 
 .timer {
   font-size: 1.5rem;
-  color: #d9534f; /* Red color for urgency */
+  color: #d9534f;
   text-align: center;
   margin-bottom: 20px;
   font-weight: bold;
@@ -93,13 +93,3 @@ h2 {
   color: #007bff;
 }
 
-/*.button-group .btn-secondary {*/
-/*  background-color: #6c757d; !* Set to a different color *!*/
-/*  color: white;*/
-/*  border: none;*/
-/*}*/
-/**/
-/*.button-group .btn-secondary:hover {*/
-/*  background-color: #5a6268; !* Slightly darker on hover *!*/
-/*}*/
-/**/
