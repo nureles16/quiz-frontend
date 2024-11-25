@@ -24,7 +24,9 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        this.showHeader = !['/login', '/register', '/quiz','/'].includes(event.urlAfterRedirects);
+        const excludedRoutes = ['/login', '/register', '/'];
+        const isQuizRoute = event.urlAfterRedirects.startsWith('/quiz/');
+        this.showHeader = !(excludedRoutes.includes(event.urlAfterRedirects) || isQuizRoute);
 
       }
     });

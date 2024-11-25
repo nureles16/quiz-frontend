@@ -4,6 +4,7 @@ import {NgForOf} from "@angular/common";
 import {Router} from "@angular/router";
 import {Quiz} from "../../models/quiz.model";
 import {FormsModule} from "@angular/forms";
+import {AuthService} from "../../auth/auth.service";
 
 @Component({
   selector: 'app-quiz-selection',
@@ -22,7 +23,8 @@ export class QuizSelectionComponent implements OnInit {
   filteredQuizzes: Quiz[] = [];
 
   constructor(private quizService: QuizService,
-              private router: Router) {}
+              private router: Router,
+              private authService: AuthService,) {}
 
   ngOnInit(): void {
     this.quizzes = this.quizService.getQuizzes();
@@ -37,6 +39,13 @@ export class QuizSelectionComponent implements OnInit {
   }
 
   startQuiz(id: number): void {
-    this.router.navigate([`/quiz`, id]);
+    this.authService.isLoggedIn$.subscribe(isLoggedIn => {
+      if (isLoggedIn) {
+        this.router.navigate([`/quiz`, id]);
+      } else {
+        this.router.navigate(['/login']);
+      }
+    });
   }
+
 }
