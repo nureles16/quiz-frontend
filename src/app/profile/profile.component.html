@@ -13,15 +13,18 @@
       <thead>
       <tr>
         <th>Quiz Title</th>
+        <th>Subject</th>
         <th>Score</th>
         <th>Date Taken</th>
+        <th>Delete</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let quiz of quizHistory; let i = index">
         <td>{{ quiz.title }}</td>
-        <td>{{ quiz.score }}</td>
-        <td>{{ quiz.date | date: 'shortDate' }}</td>
+        <td>{{ quiz.subject }}</td>
+        <td>{{ quiz.score}}</td>
+        <td>{{ formatDate(quiz.completedAt) }}</td>
         <td style="width: 15%">
           <button class="delete-btn" (click)="deleteQuiz(i)">Delete</button>
         </td>

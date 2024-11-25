@@ -6,10 +6,11 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
   providedIn: 'root'
 })
 export class QuizService {
-  private apiUrl = 'http://localhost:8080/api/quiz-results/submit';
+  private apiUrl = 'http://localhost:8080/api/quiz-results';
   constructor(private http: HttpClient) {}
 
   submitQuizResult(quizResult: any): Observable<any> {
+    const url = `${this.apiUrl}/submit`;
     const token = localStorage.getItem('token');
     if (!token) {
       console.error('No token found in localStorage.');
@@ -21,7 +22,7 @@ export class QuizService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.post(this.apiUrl, quizResult, { headers }).pipe(
+    return this.http.post(url, quizResult, { headers }).pipe(
       catchError((error) => {
         console.error('Error submitting quiz result:', error);
         return throwError(() => new Error('Failed to submit quiz result.'));
@@ -30,8 +31,24 @@ export class QuizService {
   }
 
   getQuizResultsByUser(userId: number): Observable<any> {
-    const url = `${this.apiUrl}/user/${userId}`;
-    return this.http.get(url);
+    const token = localStorage.getItem('token');
+    const url = `${this.apiUrl}/user-results`;
+    if (!token) {
+      console.error('No token found in localStorage.');
+      return throwError(() => new Error('User is not authenticated.'));
+    }
+    console.log("Token",token)
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    console.log("Header:",headers)
+    return this.http.get(url, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error fetching quiz results:', error);
+        return throwError(() => new Error('Failed to fetch quiz results.'));
+      })
+    );
   }
 
   calculateScore(selectedAnswers: { [questionId: number]: string }, id: number): { score: number; total: number } {
