@@ -80,13 +80,18 @@ export class QuizTakeComponent implements OnInit, OnDestroy {
 
     const id = this.route.snapshot.paramMap.get('id')!;
     const score = this.calculateScore();
+    const quizTitle = this.questions[0]?.title || 'Unknown Title';
+    const quizSubject = this.questions[0]?.subject || 'Unknown Subject';
     const quizResult = {
       id: id,
       userId: this.userId,
+      title: quizTitle,
+      subject: quizSubject,
       score: score,
       totalQuestions: this.questions.length,
       selectedAnswers: this.selectedAnswers,
     };
+    console.log(quizResult);
     this.router.navigate(['/results'], { state: quizResult });
     this.quizService.submitQuizResult(quizResult).subscribe(
       response => {

@@ -4,6 +4,8 @@
 
   <div *ngIf="questions.length > 0; else noQuestions">
     <div class="quiz-card">
+      <h2>{{ questions[currentQuestionIndex].subject}}</h2>
+      <h2>{{ questions[currentQuestionIndex].title}}</h2>
       <h3>{{ questions[currentQuestionIndex].question }}</h3>
 
       <div *ngFor="let option of questions[currentQuestionIndex].options">
