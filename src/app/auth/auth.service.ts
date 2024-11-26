@@ -52,9 +52,18 @@ export class AuthService {
         this.token = response.token;
         localStorage.setItem('token', response.token);
         this.isLoggedIn = true;
-        this.userService.updateUser(response.user);
-        console.log("Token:",response.token)
-        console.log("User:",response.user)
+
+        this.userService.updateUser(response.user).subscribe(
+          updatedUser => {
+            console.log("User updated:", updatedUser);
+          },
+          error => {
+            console.error("Failed to update user:", error);
+          }
+        );
+
+        console.log("Token:", response.token);
+        console.log("User:", response.user);
         return 'Login successful';
       }),
       catchError((error: HttpErrorResponse) => {

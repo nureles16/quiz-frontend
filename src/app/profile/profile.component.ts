@@ -51,9 +51,19 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(['/quiz-selection']);
   }
 
-  deleteQuiz(index: number): void {
-    this.quizHistory.splice(index, 1);
-    this.totalQuizzes = this.quizHistory.length;
+  deleteQuizResult(resultId: number): void {
+    if (confirm('Are you sure you want to delete this quiz result?')) {
+      this.quizService.deleteQuizResult(resultId).subscribe({
+        next: () => {
+          console.log('Quiz result deleted successfully.');
+          this.quizHistory = this.quizHistory.filter((result) => result.id !== resultId);
+          this.totalQuizzes--;
+        },
+        error: (error) => {
+          console.error('Error deleting quiz result:', error);
+        }
+      });
+    }
   }
 
   formatDate(date: string): string {
