@@ -37,12 +37,10 @@ export class QuizService {
       console.error('No token found in localStorage.');
       return throwError(() => new Error('User is not authenticated.'));
     }
-    console.log("Token",token)
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
-    console.log("Header:",headers)
     return this.http.get(url, { headers }).pipe(
       catchError((error) => {
         console.error('Error fetching quiz results:', error);
@@ -52,7 +50,6 @@ export class QuizService {
   }
 
   deleteQuizResult(resultId: number): Observable<any> {
-    console.log(resultId);
     const token = localStorage.getItem('token');
     const url = `${this.apiUrl}/${resultId}`;
     if (!token) {

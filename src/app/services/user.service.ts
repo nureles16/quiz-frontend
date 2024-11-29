@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, catchError, map, Observable, throwError} from "rxjs";
+import {BehaviorSubject, catchError, map, Observable, tap, throwError} from "rxjs";
 import {User} from "../auth/auth.service";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 
@@ -22,12 +22,9 @@ export class UserService {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     });
-
     return this.http.put<User>(`${this.apiUrl}/${user.id}`, user, { headers }).pipe(
-      map(updatedUser => {
-        // Successfully updated, now update the BehaviorSubject
+      tap((updatedUser) => {
         this.userSubject.next(updatedUser);
-        return updatedUser;
       }),
       catchError((error) => {
         let errorMessage = 'Failed to update user; please try again.';

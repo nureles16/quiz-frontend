@@ -62,8 +62,6 @@ export class AuthService {
           }
         );
 
-        console.log("Token:", response.token);
-        console.log("User:", response.user);
         return 'Login successful';
       }),
       catchError((error: HttpErrorResponse) => {
