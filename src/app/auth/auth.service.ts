@@ -28,8 +28,8 @@ export class AuthService {
   register(user: User): Observable<string> {
     this.loggedIn.next(false);
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<{ message: string }>(`${this.apiUrl}/register`, user, { headers }).pipe(
-      map(response => response.message),
+    return this.http.post<{ token: string }>(`${this.apiUrl}/register`, user, { headers }).pipe(
+      map(response => response.token),
       catchError((error) => {
         let errorMessage = 'Registration failed; please try again.';
         if (error.status === 400) {
