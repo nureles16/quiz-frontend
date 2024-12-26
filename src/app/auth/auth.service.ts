@@ -41,7 +41,6 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<string> {
-    this.loggedIn.next(true);
     if (!username || !password) {
       return throwError(() => new Error('Username and password are required'));
     }
@@ -51,6 +50,7 @@ export class AuthService {
       map(response => {
         this.token = response.token;
         localStorage.setItem('token', response.token);
+        this.loggedIn.next(true);
         this.isLoggedIn = true;
 
         this.userService.updateUser(response.user).subscribe(
@@ -65,7 +65,14 @@ export class AuthService {
         return 'Login successful';
       }),
       catchError((error: HttpErrorResponse) => {
-        const errorMessage = error.error.message || 'Invalid username or password';
+        let errorMessage = 'An error occurred. Please try again.';
+        if (error.status === 404) {
+          errorMessage = 'User is not registered.';
+        } else if (error.status === 401) {
+          errorMessage = 'Invalid username or password.';
+        } else if (error.status === 403) {
+          errorMessage = 'User is not registered.';
+        }
         return throwError(() => new Error(errorMessage));
       })
     );

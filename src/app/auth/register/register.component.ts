@@ -28,6 +28,7 @@ import {MatCard, MatCardContent, MatCardTitle} from "@angular/material/card";
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
+
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
   submitted = false;
@@ -40,13 +41,12 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      username: ['', Validators.required],
+      name: ['', [Validators.required, Validators.minLength(2)]],
+      username: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(5)]]
     });
   }
-
 
   get f() {
     return this.registerForm.controls;
@@ -72,5 +72,4 @@ export class RegisterComponent implements OnInit {
       }
     });
   }
-
 }
