@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NgIf} from "@angular/common";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {NgClass, NgIf} from "@angular/common";
 import {Router, RouterLink} from '@angular/router';
 import {AuthService} from "../auth.service";
 import {MatCard, MatCardContent, MatCardTitle} from "@angular/material/card";
@@ -22,7 +22,9 @@ import {MatButton} from "@angular/material/button";
     MatButton,
     MatLabel,
     MatError,
-    RouterLink
+    RouterLink,
+    NgClass,
+    FormsModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -32,6 +34,7 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   submitted = false;
   errorMessage: string | null = null;
+  showPassword: boolean = false;
   loading = false;
 
   constructor(

@@ -34,6 +34,7 @@ export class RegisterComponent implements OnInit {
   submitted = false;
   registrationError: string | null = null;
   loading = false;
+  showPassword: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
               private authService: AuthService,
@@ -46,10 +47,6 @@ export class RegisterComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(5)]]
     });
-  }
-
-  get f() {
-    return this.registerForm.controls;
   }
 
   onSubmit(): void {

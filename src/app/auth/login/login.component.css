@@ -1,7 +1,8 @@
 .container {
+  max-width: 501px;
   margin: auto;
   padding: 20px;
-  background-color: #f8f9fa;
+  background-color: #e0f7fa;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -20,7 +21,14 @@ button {
   width: 100%;
 }
 
-.invalid-feedback {
-  display: block;
-  color: #dc3545;
+.text-danger{
+  margin-top: 1%;
 }
+
+.custom-checkbox {
+  transform: scale(1.5);
+  border: 2px solid #007bff;
+  border-radius: 5px;
+  padding: 5px;
+}
+

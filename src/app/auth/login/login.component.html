@@ -1,8 +1,5 @@
 <div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-4">
-      <h2 class="text-center mb-4">Login</h2>
-
+      <h2>Login</h2>
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
           <label for="username">Username</label>
@@ -11,24 +8,39 @@
             id="username"
             formControlName="username"
             class="form-control"
+            [ngClass]="{ 'is-invalid': submitted || loginForm.controls['username']?.errors?.['minlength'] }"
             placeholder="Enter username"
+            aria-describedby="usernameError"
           />
-          <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="text-danger">
-            Please enter a valid username.
+          <div id="usernameError" class="text-danger" *ngIf="loginForm.get('username')?.errors?.['minlength']">
+            Username must be at least 2 characters long.
           </div>
         </div>
 
         <div class="form-group">
           <label for="password">Password</label>
           <input
-            type="password"
+            [type]="showPassword ? 'text' : 'password'"
             id="password"
             formControlName="password"
             class="form-control"
+            [ngClass]="{ 'is-invalid': submitted || loginForm.controls['password']?.errors?.['minlength'] }"
             placeholder="Enter password"
+            aria-describedby="passwordError"
           />
-          <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-danger">
-            Password is required.
+          <div class="form-check mt-2">
+            <input
+              type="checkbox"
+              id="togglePassword"
+              class="form-check-input custom-checkbox"
+              (change)="showPassword = !showPassword"
+            />
+            <label for="togglePassword" class="form-check-label">
+              {{ showPassword ? 'Hide Password' : 'Show Password' }}
+            </label>
+          </div>
+          <div id="passwordError" class="text-danger" *ngIf="loginForm.get('password')?.errors?.['minlength']">
+            Password must be at least 5 characters long.
           </div>
         </div>
 
@@ -45,6 +57,4 @@
           <p>Don't have an account? <a [routerLink]="['/register']">Register here</a></p>
         </div>
       </form>
-    </div>
-  </div>
 </div>
