@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {UserService} from "../services/user.service";
 import {Router} from "@angular/router";
 import {FormsModule} from "@angular/forms";
+import {AuthService} from "../auth/auth.service";
 
 @Component({
   selector: 'app-edit-profile',
@@ -17,16 +17,16 @@ export class EditProfileComponent implements OnInit {
   user: any;
   originalUser: any;
 
-  constructor(private userService: UserService,
+  constructor(private authService: AuthService,
               private router: Router) {}
 
   ngOnInit(): void {
-    this.user = this.userService.getCurrentUser();
+    this.user = this.authService.getCurrentUser();
     this.originalUser = { ...this.user };
   }
 
   onSubmit(): void {
-    this.userService.updateUser(this.user).subscribe(
+    this.authService.updateUser(this.user).subscribe(
       updatedUser => {
         console.log('User successfully updated:', updatedUser);
         this.router.navigate(['/profile']);

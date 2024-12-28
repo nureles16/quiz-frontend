@@ -6,7 +6,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
   providedIn: 'root'
 })
 export class QuizService {
-  private apiUrl = 'http://localhost:8080/api/quiz-results';
+  private apiUrl = 'http://localhost:8080/quiz-results';
   constructor(private http: HttpClient) {}
 
   submitQuizResult(quizResult: any): Observable<any> {

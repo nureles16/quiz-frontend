@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {QuizService} from "../services/quiz.service";
 import {Router} from "@angular/router";
-import {UserService} from "../services/user.service";
 import {DatePipe, NgForOf} from "@angular/common";
-import {User} from "../auth/auth.service";
+import {AuthService, User} from "../auth/auth.service";
 
 @Component({
   selector: 'app-profile',
@@ -22,13 +21,13 @@ export class ProfileComponent implements OnInit {
   quizHistory: any[] = [];
   totalQuizzes: number = 0;
 
-  constructor(private userService: UserService,
+  constructor(private authService: AuthService,
               private quizService: QuizService,
               private router: Router,
               private datePipe: DatePipe) {}
 
   ngOnInit(): void {
-    this.user = this.userService.getCurrentUser();
+    this.user = this.authService.getCurrentUser();
     if (this.user) {
       this.quizService.getQuizResultsByUser(this.user.id).subscribe({
         next: (data) => {
@@ -47,7 +46,7 @@ export class ProfileComponent implements OnInit {
   }
 
   logout(): void {
-    this.userService.logout();
+    this.authService.logout();
     this.router.navigate(['/quiz-selection']);
   }
 
