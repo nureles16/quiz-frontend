@@ -31,16 +31,13 @@ export class QuizService {
   }
 
   getQuizResultsByUser(userId: number): Observable<any> {
-    const token = localStorage.getItem('token');
+    const token = this.getToken();
     const url = `${this.apiUrl}/user-results`;
     if (!token) {
       console.error('No token found in localStorage.');
       return throwError(() => new Error('User is not authenticated.'));
     }
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
+    const headers = this.createHeaders(token);
     return this.http.get(url, { headers }).pipe(
       catchError((error) => {
         console.error('Error fetching quiz results:', error);
@@ -83,6 +80,16 @@ export class QuizService {
     return { score, total: questions.length };
   }
 
+  private getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  private createHeaders(token: string): HttpHeaders {
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+  }
 
   private quizHistory: any[] = [
     { title: 'Math Quiz', score: 85, date: new Date() },

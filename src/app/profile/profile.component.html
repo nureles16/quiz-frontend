@@ -16,6 +16,7 @@
         <th>Subject</th>
         <th>Score</th>
         <th>Date Taken</th>
+        <th>Feedback</th>
         <th>Delete</th>
       </tr>
       </thead>
@@ -25,6 +26,9 @@
         <td>{{ quiz.subject }}</td>
         <td>{{ quiz.score}}</td>
         <td>{{ formatDate(quiz.completedAt) }}</td>
+        <td style="width: 15%">
+          <button class="feedback">Feedback</button>
+        </td>
         <td style="width: 15%">
           <button class="delete-btn" (click)="deleteQuizResult(quiz.id)">Delete</button>
         </td>

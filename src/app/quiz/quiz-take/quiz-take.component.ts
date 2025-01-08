@@ -2,6 +2,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {QuizService} from "../../services/quiz.service";
 import {NgForOf, NgIf} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
+import {interval, Subscription, takeWhile} from "rxjs";
+import {QuizResult} from "../../models/result.model";
 
 @Component({
   selector: 'app-quiz-take',
@@ -20,6 +22,7 @@ export class QuizTakeComponent implements OnInit, OnDestroy {
   timer: any;
   timeLeft: number = 100;
   userId: number = 1;
+  timerSubscription: Subscription | undefined
 
   constructor(private quizService: QuizService,
               private router: Router,
@@ -35,17 +38,18 @@ export class QuizTakeComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    clearInterval(this.timer);
+    this.timerSubscription?.unsubscribe();
   }
 
   startTimer() {
-    this.timer = setInterval(() => {
-      if (this.timeLeft > 0) {
-        this.timeLeft--;
-      } else {
+    this.timerSubscription = interval(1000).pipe(
+      takeWhile(() => this.timeLeft > 0)
+    ).subscribe(() => {
+      this.timeLeft--;
+      if (this.timeLeft === 0) {
         this.submitQuiz();
       }
-    }, 1000);
+    });
   }
 
   formatTime(seconds: number): string {
@@ -78,21 +82,17 @@ export class QuizTakeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const id = this.route.snapshot.paramMap.get('id')!;
+    const id = +this.route.snapshot.paramMap.get('id')!;
     const score = this.calculateScore();
-    const quizTitle = this.questions[0]?.title || 'Unknown Title';
-    const quizSubject = this.questions[0]?.subject || 'Unknown Subject';
-    const quizResult = {
+    const quizResult: QuizResult = {
       id: id,
       userId: this.userId,
-      title: quizTitle,
-      subject: quizSubject,
+      title: this.questions[0]?.title || 'Unknown Title',
+      subject: this.questions[0]?.subject || 'Unknown Subject',
       score: score,
       totalQuestions: this.questions.length,
       selectedAnswers: this.selectedAnswers,
     };
-    console.log(quizResult);
-    this.router.navigate(['/results'], { state: quizResult });
     this.quizService.submitQuizResult(quizResult).subscribe(
       response => {
         console.log('Quiz result saved successfully:', response);

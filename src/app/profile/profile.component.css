@@ -42,6 +42,12 @@ th {
   margin-top: 20px;
 }
 
+.feedback{
+  display: flex;
+  justify-content: space-around;
+  margin-top: 0;
+}
+
 button {
   padding: 10px 20px;
   border: none;
