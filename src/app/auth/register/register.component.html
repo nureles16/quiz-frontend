@@ -9,7 +9,7 @@
         formControlName="username"
         class="form-control"
         placeholder="Enter username"
-        [ngClass]="{ 'is-invalid': submitted || registerForm.controls['username']?.errors?.['minlength'] }"
+        [ngClass]="{ 'is-invalid': submitted || registerForm.controls['username'].errors?.['minlength'] }"
         aria-describedby="usernameError"
       />
       <div id="usernameError" class="text-danger" *ngIf="submitted || registerForm.get('username')?.errors?.['minlength']">
@@ -25,7 +25,7 @@
         formControlName="name"
         class="form-control"
         placeholder="Enter name"
-        [ngClass]="{ 'is-invalid': submitted || registerForm.controls['name']?.errors?.['minlength'] }"
+        [ngClass]="{ 'is-invalid': submitted || registerForm.controls['name'].errors?.['minlength'] }"
         aria-describedby="nameError"
       />
       <div id="nameError" class="text-danger" *ngIf="submitted || registerForm.get('name')?.errors?.['minlength']">
@@ -42,7 +42,7 @@
         formControlName="email"
         class="form-control"
         placeholder="Enter email"
-        [ngClass]="{ 'is-invalid': submitted || registerForm.controls['email']?.errors?.['email'] }"
+        [ngClass]="{ 'is-invalid': submitted || registerForm.controls['email'].errors?.['email'] }"
         aria-describedby="emailError"
       />
       <div id="emailError" class="text-danger" *ngIf="registerForm.get('email')?.errors?.['email']">
@@ -58,7 +58,7 @@
         formControlName="password"
         class="form-control"
         placeholder="Enter password"
-        [ngClass]="{ 'is-invalid': submitted || registerForm.controls['password']?.errors?.['minlength'] }"
+        [ngClass]="{ 'is-invalid': submitted || registerForm.controls['password'].errors?.['minlength'] }"
         aria-describedby="passwordError"
       />
       <div class="form-check mt-2">

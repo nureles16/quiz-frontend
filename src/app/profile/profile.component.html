@@ -2,8 +2,8 @@
   <h2>User Profile</h2>
 
   <div class="profile-info">
-    <h3>{{ user?.name }}</h3>
-    <p>Email: {{ user?.email }}</p>
+    <h3>{{ users?.name }}</h3>
+    <p>Email: {{ users?.email }}</p>
     <p>Total Quizzes Taken: {{ totalQuizzes }}</p>
   </div>
 
@@ -21,13 +21,13 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let quiz of quizHistory; let i = index">
+      <tr *ngFor="let quiz of quizHistory;">
         <td>{{ quiz.title }}</td>
         <td>{{ quiz.subject }}</td>
         <td>{{ quiz.score}}</td>
         <td>{{ formatDate(quiz.completedAt) }}</td>
         <td style="width: 15%">
-          <button class="feedback">Feedback</button>
+          <button class="feedback" (click)="feedback(quiz.id)">Feedback</button>
         </td>
         <td style="width: 15%">
           <button class="delete-btn" (click)="deleteQuizResult(quiz.id)">Delete</button>

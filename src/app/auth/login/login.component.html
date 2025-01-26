@@ -8,7 +8,7 @@
             id="username"
             formControlName="username"
             class="form-control"
-            [ngClass]="{ 'is-invalid': submitted || loginForm.controls['username']?.errors?.['minlength'] }"
+            [ngClass]="{ 'is-invalid': submitted || loginForm.controls['username'].errors?.['minlength'] }"
             placeholder="Enter username"
             aria-describedby="usernameError"
           />
@@ -24,7 +24,7 @@
             id="password"
             formControlName="password"
             class="form-control"
-            [ngClass]="{ 'is-invalid': submitted || loginForm.controls['password']?.errors?.['minlength'] }"
+            [ngClass]="{ 'is-invalid': submitted || loginForm.controls['password'].errors?.['minlength'] }"
             placeholder="Enter password"
             aria-describedby="passwordError"
           />

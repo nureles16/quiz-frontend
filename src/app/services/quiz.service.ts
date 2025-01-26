@@ -11,16 +11,13 @@ export class QuizService {
 
   submitQuizResult(quizResult: any): Observable<any> {
     const url = `${this.apiUrl}/submit`;
-    const token = localStorage.getItem('token');
+    const token = this.getToken();
     if (!token) {
       console.error('No token found in localStorage.');
       return throwError(() => new Error('User is not authenticated.'));
     }
 
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
+    const headers = this.createHeaders(token);
 
     return this.http.post(url, quizResult, { headers }).pipe(
       catchError((error) => {
@@ -47,17 +44,14 @@ export class QuizService {
   }
 
   deleteQuizResult(resultId: number): Observable<any> {
-    const token = localStorage.getItem('token');
+    const token = this.getToken();
     const url = `${this.apiUrl}/${resultId}`;
     if (!token) {
       console.error('No token found in localStorage.');
       return throwError(() => new Error('User is not authenticated.'));
     }
 
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
+    const headers = this.createHeaders(token);
 
     return this.http.delete(url, { headers }).pipe(
       catchError((error) => {

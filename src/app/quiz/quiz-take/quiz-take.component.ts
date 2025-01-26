@@ -3,7 +3,7 @@ import {QuizService} from "../../services/quiz.service";
 import {NgForOf, NgIf} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {interval, Subscription, takeWhile} from "rxjs";
-import {QuizResult} from "../../models/result.model";
+import {AuthService, User} from "../../auth/auth.service";
 
 @Component({
   selector: 'app-quiz-take',
@@ -21,21 +21,22 @@ export class QuizTakeComponent implements OnInit, OnDestroy {
   selectedAnswers: { [questionId: number]: string } = {};
   timer: any;
   timeLeft: number = 100;
-  userId: number = 1;
-  timerSubscription: Subscription | undefined
+  user: User | null = null;
+  timerSubscription: Subscription | undefined;
 
   constructor(private quizService: QuizService,
               private router: Router,
+              private authService: AuthService,
               private route: ActivatedRoute) {}
 
   ngOnInit() {
+    this.user = this.authService.getCurrentUser();
     this.route.paramMap.subscribe(params => {
       const id = +params.get('id')!;
       this.questions = this.quizService.getQuestions(id);
       this.startTimer();
     });
   }
-
 
   ngOnDestroy() {
     this.timerSubscription?.unsubscribe();
@@ -82,21 +83,45 @@ export class QuizTakeComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (!this.user) {
+      alert('User is not logged in.');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     const id = +this.route.snapshot.paramMap.get('id')!;
     const score = this.calculateScore();
-    const quizResult: QuizResult = {
+
+    const userAnswersMap = this.questions.reduce((map, question) => {
+      map[String(question.id)] = this.selectedAnswers[question.id] || '';
+      return map;
+    }, {} as { [key: string]: string });
+
+    const correctAnswersMap = this.questions.reduce((map, question) => {
+      map[String(question.id)] = question.answer || '';
+      return map;
+    }, {} as { [key: string]: string });
+
+    const quizResult = {
       id: id,
-      userId: this.userId,
+      userId: this.user.id,
+      username: this.user.username,
       title: this.questions[0]?.title || 'Unknown Title',
       subject: this.questions[0]?.subject || 'Unknown Subject',
       score: score,
       totalQuestions: this.questions.length,
-      selectedAnswers: this.selectedAnswers,
+      userAnswers: { ...userAnswersMap },
+      correctAnswers: { ...correctAnswersMap },
     };
+    sessionStorage.setItem('quizResult', JSON.stringify(quizResult));
+
     this.quizService.submitQuizResult(quizResult).subscribe(
       response => {
         console.log('Quiz result saved successfully:', response);
-        this.router.navigate(['/results'], { state: response });
+        this.router.navigate(['/results'], {
+          queryParams: { quizId: id },
+          state: { selectedAnswers: userAnswersMap }
+        });
       },
       error => {
         console.error('Error saving quiz result:', error);

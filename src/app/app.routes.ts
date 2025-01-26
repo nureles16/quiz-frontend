@@ -6,6 +6,7 @@ import {QuizTakeComponent} from "./quiz/quiz-take/quiz-take.component";
 import {QuizSelectionComponent} from "./quiz/quiz-selection/quiz-selection.component";
 import {ProfileComponent} from "./profile/profile.component";
 import {EditProfileComponent} from "./edit-profile/edit-profile.component";
+import {FeedbackComponent} from "./feedbacks/feedbacks.component";
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -16,4 +17,5 @@ export const routes: Routes = [
   { path: 'results', component: ResultsComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'edit-profile', component: EditProfileComponent },
+  { path: 'feedbacks/:quizId', component: FeedbackComponent }
 ];

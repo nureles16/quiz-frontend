@@ -1,1 +1,29 @@
-<p>feedbacks works!</p>
+<div class="feedback-container">
+  <h2>Feedback for {{ quizTitle }} ({{ subject }})</h2>
+  <p>Score: {{ score }} / {{ totalQuestions }}</p>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Question ID</th>
+      <th>Your Answer</th>
+      <th>Correct Answer</th>
+      <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let key of Object.keys(userAnswers)">
+      <td>{{ key }}</td>
+      <td>{{ userAnswers[key] }}</td>
+      <td>{{ correctAnswers[key] }}</td>
+      <td>
+          <span [ngClass]="{'correct': userAnswers[key] === correctAnswers[key], 'incorrect': userAnswers[key] !== correctAnswers[key]}">
+            {{ userAnswers[key] === correctAnswers[key] ? '✅ Correct' : '❌ Incorrect' }}
+          </span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <button (click)="goBack()">Back to Profile</button>
+</div>

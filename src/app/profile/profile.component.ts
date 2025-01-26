@@ -17,7 +17,7 @@ import {AuthService, User} from "../auth/auth.service";
 })
 
 export class ProfileComponent implements OnInit {
-  user: User | null = null;
+  users: User | null = null;
   quizHistory: any[] = [];
   totalQuizzes: number = 0;
 
@@ -27,15 +27,22 @@ export class ProfileComponent implements OnInit {
               private datePipe: DatePipe) {}
 
   ngOnInit(): void {
-    this.user = this.authService.getCurrentUser();
-    if (this.user) {
-      this.quizService.getQuizResultsByUser(this.user.id).subscribe({
+    this.users = this.authService.getCurrentUser();
+    if (this.users) {
+      this.quizService.getQuizResultsByUser(this.users.id).subscribe({
         next: (data) => {
-          this.quizHistory = data;
-          this.totalQuizzes = data.length;
+          if (data && Array.isArray(data)) {
+            this.quizHistory = data;
+            this.totalQuizzes = data.length;
+          } else {
+            this.quizHistory = [];
+            this.totalQuizzes = 0;
+          }
         },
         error: (error) => {
           console.error('Error fetching quiz results:', error);
+          this.quizHistory = [];
+          this.totalQuizzes = 0;
         }
       });
     }
@@ -67,5 +74,9 @@ export class ProfileComponent implements OnInit {
 
   formatDate(date: string): string {
     return this.datePipe.transform(date, 'yyyy-MM-dd HH:mm') || '';
+  }
+
+  feedback(quizId: number): void {
+    this.router.navigate(['/feedbacks', quizId]);
   }
 }
