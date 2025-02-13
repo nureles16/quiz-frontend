@@ -1,18 +1,20 @@
 <div class="container">
   <h2>Quiz</h2>
-  <div class="timer">Time Left: {{ formatTime(timeLeft) }}</div>
+  <div *ngIf="questions.length > 0" class="timer">
+    Time Left: {{ formatTime(timeLeft) }}
+  </div>
 
   <div *ngIf="questions.length > 0; else noQuestions">
     <div class="quiz-card">
-      <h2>{{ questions[currentQuestionIndex].subject}}</h2>
-      <h2>{{ questions[currentQuestionIndex].title}}</h2>
-      <h3>{{questions[currentQuestionIndex].id}}. {{ questions[currentQuestionIndex].question }}</h3>
+      <h2>{{ questions[currentQuestionIndex].subject }}</h2>
+      <h2>{{ questions[currentQuestionIndex].title }}</h2>
+      <h3>{{ questions[currentQuestionIndex].id }}. {{ questions[currentQuestionIndex].question }}</h3>
 
       <div *ngFor="let option of questions[currentQuestionIndex].options">
         <label>
           <input
             type="radio"
-            name="answer"
+            [name]="'answer_' + questions[currentQuestionIndex].id"
             [value]="option"
             (change)="selectAnswer(questions[currentQuestionIndex].id, option)"
             [checked]="selectedAnswers[questions[currentQuestionIndex].id] === option"
@@ -23,10 +25,14 @@
 
       <div class="button-group">
         <button (click)="goToPreviousQuestion()" [disabled]="currentQuestionIndex === 0">Previous</button>
-        <button (click)="resetCurrentQuestion()" [disabled]="!selectedAnswers[questions[currentQuestionIndex].id]">
+        <button (click)="resetCurrentQuestion()"
+                [disabled]="!selectedAnswers[questions[currentQuestionIndex].id]">
           Reset
         </button>
-        <button (click)="goToNextQuestion()" [disabled]="currentQuestionIndex === questions.length - 1">Next</button>
+        <button (click)="goToNextQuestion()"
+                [disabled]="questions.length === 0 || currentQuestionIndex === questions.length - 1">
+          Next
+        </button>
       </div>
       <div class="button-group">
         <button (click)="cancelQuiz()">Cancel</button>

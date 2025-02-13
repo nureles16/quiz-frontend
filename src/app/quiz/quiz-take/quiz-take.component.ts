@@ -19,22 +19,30 @@ export class QuizTakeComponent implements OnInit, OnDestroy {
   questions: any[] = [];
   currentQuestionIndex: number = 0;
   selectedAnswers: { [questionId: number]: string } = {};
-  timer: any;
   timeLeft: number = 100;
   user: User | null = null;
   timerSubscription: Subscription | undefined;
 
-  constructor(private quizService: QuizService,
-              private router: Router,
-              private authService: AuthService,
-              private route: ActivatedRoute) {}
+  constructor(
+    private quizService: QuizService,
+    private router: Router,
+    private authService: AuthService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
     this.user = this.authService.getCurrentUser();
     this.route.paramMap.subscribe(params => {
       const id = +params.get('id')!;
-      this.questions = this.quizService.getQuestions(id);
-      this.startTimer();
+      this.quizService.getQuestions(id).subscribe(
+        (questions) => {
+          this.questions = questions;
+          this.startTimer();
+        },
+        (error) => {
+          console.error('Error fetching questions:', error);
+        }
+      );
     });
   }
 
@@ -76,7 +84,7 @@ export class QuizTakeComponent implements OnInit, OnDestroy {
   }
 
   submitQuiz() {
-    clearInterval(this.timer);
+    this.timerSubscription?.unsubscribe();
 
     if (Object.keys(this.selectedAnswers).length < this.questions.length) {
       alert('Please answer all questions before submitting.');
@@ -90,54 +98,57 @@ export class QuizTakeComponent implements OnInit, OnDestroy {
     }
 
     const id = +this.route.snapshot.paramMap.get('id')!;
-    const score = this.calculateScore();
 
-    const userAnswersMap = this.questions.reduce((map, question) => {
-      map[String(question.id)] = this.selectedAnswers[question.id] || '';
-      return map;
-    }, {} as { [key: string]: string });
+    this.quizService.calculateScore(this.selectedAnswers, id).subscribe(
+      ({ score, total }) => {
 
-    const correctAnswersMap = this.questions.reduce((map, question) => {
-      map[String(question.id)] = question.answer || '';
-      return map;
-    }, {} as { [key: string]: string });
+        const userAnswersMap = this.questions.reduce((map, question) => {
+          map[String(question.id)] = this.selectedAnswers[question.id] || '';
+          return map;
+        }, {} as { [key: string]: string });
 
-    const quizResult = {
-      id: id,
-      userId: this.user.id,
-      username: this.user.username,
-      title: this.questions[0]?.title || 'Unknown Title',
-      subject: this.questions[0]?.subject || 'Unknown Subject',
-      score: score,
-      totalQuestions: this.questions.length,
-      userAnswers: { ...userAnswersMap },
-      correctAnswers: { ...correctAnswersMap },
-    };
-    sessionStorage.setItem('quizResult', JSON.stringify(quizResult));
+        const correctAnswersMap = this.questions.reduce((map, question) => {
+          map[String(question.id)] = question.answer || '';
+          return map;
+        }, {} as { [key: string]: string });
 
-    this.quizService.submitQuizResult(quizResult).subscribe(
-      response => {
-        console.log('Quiz result saved successfully:', response);
-        this.router.navigate(['/results'], {
-          queryParams: { quizId: id },
-          state: { selectedAnswers: userAnswersMap }
-        });
+        const quizResult = {
+          id: id,
+          userId: this.user?.id,
+          username: this.user?.username,
+          title: this.questions[0]?.title || 'Unknown Title',
+          subject: this.questions[0]?.subject || 'Unknown Subject',
+          score: score,
+          totalQuestions: total,
+          userAnswers: { ...userAnswersMap },
+          correctAnswers: { ...correctAnswersMap },
+        };
+
+        sessionStorage.setItem('quizResult', JSON.stringify(quizResult));
+
+        this.quizService.submitQuizResult(quizResult).subscribe(
+          response => {
+            console.log('Quiz result saved successfully:', response);
+            this.router.navigate(['/results'], {
+              queryParams: { quizId: id },
+              state: { selectedAnswers: userAnswersMap }
+            });
+          },
+          error => {
+            console.error('Error saving quiz result:', error);
+            if (error.status === 401) {
+              alert('Your session has expired. Please log in again.');
+              this.router.navigate(['/login']);
+            }
+          }
+        );
       },
       error => {
-        console.error('Error saving quiz result:', error);
-        if (error.status === 401) {
-          alert('Your session has expired. Please log in again.');
-          this.router.navigate(['/login']);
-        }
+        console.error('Error calculating score:', error);
       }
     );
   }
 
-  calculateScore(): number {
-    return this.questions.reduce((score, question) => {
-      return this.selectedAnswers[question.id] === question.answer ? score + 1 : score;
-    }, 0);
-  }
 
   resetCurrentQuestion() {
     const currentQuestionId = this.questions[this.currentQuestionIndex].id;

@@ -15,7 +15,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 
 export class ResultsComponent implements OnInit {
   selectedAnswers: { [questionId: number]: string } = {};
-  id: number = 1;
+  id: number = 0;
   score: number = 0;
   totalQuestions: number = 0;
   correctAnswers: { [questionId: number]: string } = {};
@@ -36,40 +36,39 @@ export class ResultsComponent implements OnInit {
         return;
       }
 
-      const questions = this.quizService.getQuestions(this.id);
-      if (!questions.length) {
-        console.error('No questions found for quiz ID:', this.id);
-        this.router.navigate(['/quiz-selection']);
-        return;
-      }
-
-    const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras.state as { selectedAnswers?: { [key: string]: string } } | undefined;
-    this.selectedAnswers = state?.selectedAnswers || {};
-
-      if (Object.keys(this.selectedAnswers).length === 0) {
-        const savedResult = sessionStorage.getItem('quizResult');
-        if (savedResult) {
-          const parsedResult = JSON.parse(savedResult);
-          this.selectedAnswers = parsedResult.userAnswers || {};
-          this.correctAnswers = parsedResult.correctAnswers || {};
+      this.quizService.getQuestions(this.id).subscribe(questions => {
+        if (!questions || questions.length === 0) {
+          console.error('No questions found for quiz ID:', this.id);
+          this.router.navigate(['/quiz-selection']);
+          return;
         }
-      }
 
-      if (!this.correctAnswers || Object.keys(this.correctAnswers).length === 0) {
         this.correctAnswers = questions.reduce((map, question) => {
           map[String(question.id)] = question.answer;
           return map;
         }, {} as { [key: string]: string });
-  }
 
-      this.calculateScore();
+        const navigation = this.router.getCurrentNavigation();
+        const state = navigation?.extras.state as { selectedAnswers?: { [key: string]: string } } | undefined;
+        this.selectedAnswers = state?.selectedAnswers || {};
+
+        if (Object.keys(this.selectedAnswers).length === 0) {
+          const savedResult = sessionStorage.getItem('quizResult');
+          if (savedResult) {
+            const parsedResult = JSON.parse(savedResult);
+            this.selectedAnswers = parsedResult.userAnswers || {};
+          }
+        }
+
+        this.calculateScore();
+      });
     });
   }
 
   calculateScore() {
-    const result = this.quizService.calculateScore(this.selectedAnswers, this.id);
-    this.score = result.score;
-    this.totalQuestions = result.total;
+    this.quizService.calculateScore(this.selectedAnswers, this.id).subscribe(result => {
+      this.score = result.score;
+      this.totalQuestions = result.total;
+    });
   }
 }
