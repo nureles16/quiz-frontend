@@ -1,0 +1,106 @@
+<div *ngIf="quizzes.length > 0" class="admin-container">
+  <h2>All Quizzes</h2>
+  <table class="admin-table">
+    <thead>
+    <tr>
+      <th>Quiz Title</th>
+      <th>Subject</th>
+      <th>Description</th>
+      <th>Actions</th>
+      <th>Edit</th>
+      <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let quiz of quizzes">
+      <td *ngIf="!quiz.editing">{{ quiz.title }}</td>
+      <td *ngIf="quiz.editing">
+        <input [(ngModel)]="quiz.title" />
+      </td>
+
+      <td *ngIf="!quiz.editing">{{ quiz.subject }}</td>
+      <td *ngIf="quiz.editing">
+        <input [(ngModel)]="quiz.subject" />
+      </td>
+
+      <td *ngIf="!quiz.editing">{{ quiz.description }}</td>
+      <td *ngIf="quiz.editing">
+        <input [(ngModel)]="quiz.description" />
+      </td>
+
+      <td>
+        <button *ngIf="!quiz.editing" class="view-btn" (click)="getQuestionsForQuiz(quiz.id)">View Questions</button>
+      </td>
+
+      <td>
+        <button *ngIf="!quiz.editing" class="edit-btn" (click)="editQuiz(quiz)">Edit</button>
+        <button
+          *ngIf="quiz.editing"
+          class="save-btn"
+          (click)="updateQuiz(quiz)"
+          [disabled]="!hasQuizChanged(quiz)">
+          Save
+        </button>
+        <button *ngIf="quiz.editing" class="cancel-btn" (click)="cancelEditQuiz(quiz)">Cancel</button>
+      </td>
+
+      <td>
+        <button class="delete-btn" (click)="deleteQuiz(quiz.id)">Delete</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="selectedQuizQuestions.length > 0" class="selected-quiz-container">
+  <h3>Questions for Quiz: {{ selectedQuiz?.title }}</h3>
+  <table class="selected-quiz-table">
+    <thead>
+    <tr>
+      <th>Question</th>
+      <th>Options</th>
+      <th>Answer</th>
+      <th>Edit</th>
+      <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let question of selectedQuizQuestions">
+      <td *ngIf="!question.editing">{{ question.question }}</td>
+      <td *ngIf="question.editing">
+        <input [(ngModel)]="question.question" />
+      </td>
+
+      <td *ngIf="!question.editing">
+        <ul>
+          <li *ngFor="let option of question.options">{{ option }}</li>
+        </ul>
+      </td>
+      <td *ngIf="question.editing">
+        <input [(ngModel)]="question.options" />
+      </td>
+
+      <td *ngIf="!question.editing">{{ question.answer }}</td>
+      <td *ngIf="question.editing">
+        <input [(ngModel)]="question.answer" />
+      </td>
+
+      <td>
+        <button *ngIf="!question.editing" class="edit-btn" (click)="editQuestion(question)">Edit</button>
+        <button
+          *ngIf="question.editing"
+          class="save-btn"
+          (click)="updateQuestion(question)"
+          [disabled]="!hasQuestionChanged(question)">
+          Save
+        </button>
+        <button *ngIf="question.editing" class="cancel-btn" (click)="cancelEditQuestion(question)">Cancel</button>
+      </td>
+
+      <td>
+        <button class="delete-btn" (click)="deleteQuestion(question.id)">Delete</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

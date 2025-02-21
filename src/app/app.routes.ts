@@ -7,6 +7,8 @@ import {QuizSelectionComponent} from "./quiz/quiz-selection/quiz-selection.compo
 import {ProfileComponent} from "./profile/profile.component";
 import {EditProfileComponent} from "./edit-profile/edit-profile.component";
 import {FeedbackComponent} from "./feedbacks/feedbacks.component";
+import {AdminGuard} from "./guards/admin.guard";
+import {AdminComponent} from "./admin/admin.component";
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -17,5 +19,6 @@ export const routes: Routes = [
   { path: 'results', component: ResultsComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'edit-profile', component: EditProfileComponent },
-  { path: 'feedbacks/:quizId', component: FeedbackComponent }
+  { path: 'feedbacks/:quizId', component: FeedbackComponent },
+  { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
 ];

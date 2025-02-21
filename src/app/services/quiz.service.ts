@@ -85,17 +85,12 @@ export class QuizService {
   }
 
 
-  private createHeaders(token: string): HttpHeaders {
+  private createHeaders(token: string | null): HttpHeaders {
     return new HttpHeaders({
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     });
   }
-
-  private quizHistory: any[] = [
-    { title: 'Math Quiz', score: 85, date: new Date() },
-    { title: 'Science Quiz', score: 90, date: new Date() },
-  ];
 
   private getToken(): string | null {
     return localStorage.getItem('token');
@@ -135,5 +130,39 @@ export class QuizService {
         return throwError(() => new Error('Failed to fetch questions.'));
       })
     );
+  }
+
+  updateQuiz(id: number, quiz: Quizzes): Observable<Quizzes> {
+    const token = this.getToken();
+    if (!token) {
+      console.error('No token found in localStorage.');
+      return throwError(() => new Error('User is not authenticated.'));
+    }
+
+    const headers = this.createHeaders(token);
+    const url = `${this.apiUrl}/quizzes/${id}`;
+    return this.http.put<Quizzes>(url, quiz, {headers});
+  }
+
+  updateQuestion(id: number, question: Question): Observable<Question> {
+    const token = this.getToken();
+    if (!token) {
+      console.error('No token found in localStorage.');
+      return throwError(() => new Error('User is not authenticated.'));
+    }
+
+    const headers = this.createHeaders(token);
+    const url = `${this.apiUrl}/questions/${id}`;
+    return this.http.put<Question>(url, question, {headers});
+  }
+
+  deleteQuiz(quizId: number): Observable<void> {
+    const url = `${this.apiUrl}/quizzes/${quizId}`;
+    return this.http.delete<void>(url);
+  }
+
+  deleteQuestion(questionId: number): Observable<void> {
+    const url = `${this.apiUrl}/questions/${questionId}`;
+    return this.http.delete<void>(url);
   }
 }

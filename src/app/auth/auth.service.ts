@@ -3,6 +3,7 @@ import {BehaviorSubject, catchError, map, Observable, tap, throwError} from "rxj
 import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 
 export interface User {
+  role: string;
   id: number;
   name: string;
   username: string;
@@ -21,6 +22,8 @@ export class AuthService {
   private loggedIn = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.loggedIn.asObservable();
   private userSubject = new BehaviorSubject<User | null>(null);
+  private userRoleSubject = new BehaviorSubject<string | null>(null);
+  userRole$ = this.userRoleSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -53,6 +56,8 @@ export class AuthService {
         this.isLoggedIn = true;
         this.userSubject.next(response.user);
 
+        this.userRoleSubject.next(response.user.role);
+        localStorage.setItem('userRole', response.user.role);
         return 'Login successful';
       }),
       catchError((error: HttpErrorResponse) => {
@@ -67,6 +72,10 @@ export class AuthService {
         return throwError(() => new Error(errorMessage));
       })
     );
+  }
+
+  getUserRole(): string | null {
+    return this.userRoleSubject.value || localStorage.getItem('userRole');
   }
 
   getCurrentUser(): User | null {
