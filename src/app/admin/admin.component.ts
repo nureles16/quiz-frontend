@@ -30,6 +30,27 @@ export class AdminComponent implements OnInit {
   selectedQuizQuestions: EditableQuestion[] = [];
   originalQuizData: { [id: number]: EditableQuiz } = {};
   originalQuestionData: { [id: number]: EditableQuestion } = {};
+  showQuizForm: boolean = false;
+  showQuestionForm: boolean = false;
+
+  newQuiz: Quizzes = {
+    id: 0,
+    subject: '',
+    title: '',
+    description: '',
+  };
+
+  newQuestion: Question = {
+    id: 0,
+    subject: '',
+    title: '',
+    question: '',
+    options: ['', '', '', ''],
+    topics: [],
+    answer: '',
+    quizId: 0,
+  };
+
 
   constructor(private quizService: QuizService,
               private cdr: ChangeDetectorRef) {}
@@ -162,4 +183,54 @@ export class AdminComponent implements OnInit {
       );
     }
   }
+
+  toggleQuizForm(): void {
+    this.showQuizForm = !this.showQuizForm;
+  }
+
+  toggleQuestionForm(): void {
+    this.showQuestionForm = !this.showQuestionForm;
+  }
+
+  addQuiz(): void {
+    this.quizService.addQuiz(this.newQuiz).subscribe(
+      (addedQuiz) => {
+        this.quizzes.push({ ...addedQuiz, editing: false, original: { ...addedQuiz } });
+        console.log('Quiz added successfully');
+        this.newQuiz = {
+          id: 0,
+          subject: '',
+          title: '',
+          description: '',
+        };
+        this.showQuizForm = false;
+      },
+      (error) => console.error('Error adding quiz:', error)
+    );
+  }
+
+  addQuestion(): void {
+    if (this.selectedQuiz) {
+      this.newQuestion.quizId = this.selectedQuiz.id;
+      this.quizService.addQuestion(this.newQuestion).subscribe(
+        (addedQuestion) => {
+          this.selectedQuizQuestions.push({ ...addedQuestion, editing: false, original: { ...addedQuestion } });
+          console.log('Question added successfully');
+          this.newQuestion = {
+            id: 0,
+            subject: '',
+            title: '',
+            question: '',
+            options: ['', '', '', ''],
+            topics: [],
+            answer: '',
+            quizId: 0,
+          };
+          this.showQuestionForm = false;
+        },
+        (error) => console.error('Error adding question:', error)
+      );
+    }
+  }
+
 }

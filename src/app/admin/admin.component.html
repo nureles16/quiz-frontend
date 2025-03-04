@@ -1,3 +1,38 @@
+<!-- Add Quiz Button -->
+<button (click)="toggleQuizForm()">Add Quiz</button>
+
+<!-- Add Quiz Form -->
+<div *ngIf="showQuizForm" class="form-container">
+  <h3>Add New Quiz</h3>
+  <input type="text" [(ngModel)]="newQuiz.title" placeholder="Title" />
+  <input type="text" [(ngModel)]="newQuiz.subject" placeholder="Subject" />
+  <input type="text" [(ngModel)]="newQuiz.description" placeholder="Description" />
+
+  <button (click)="addQuiz()">Add</button>
+  <button (click)="toggleQuizForm()">Cancel</button>
+</div>
+
+<!-- Add Question Button -->
+<button *ngIf="selectedQuiz" (click)="toggleQuestionForm()">Add Question</button>
+
+<!-- Add Question Form -->
+<div *ngIf="showQuestionForm" class="form-container">
+  <h3>Add New Question to {{ selectedQuiz?.title }}</h3>
+  <input type="text" [(ngModel)]="newQuestion.question" placeholder="Question" />
+
+  <h4>Options:</h4>
+  <input type="text" [(ngModel)]="newQuestion.options[0]" placeholder="Option 1" />
+  <input type="text" [(ngModel)]="newQuestion.options[1]" placeholder="Option 2" />
+  <input type="text" [(ngModel)]="newQuestion.options[2]" placeholder="Option 3" />
+  <input type="text" [(ngModel)]="newQuestion.options[3]" placeholder="Option 4" />
+
+  <input type="text" [(ngModel)]="newQuestion.answer" placeholder="Answer" />
+
+  <button (click)="addQuestion()">Add</button>
+  <button (click)="toggleQuestionForm()">Cancel</button>
+</div>
+
+
 <div *ngIf="quizzes.length > 0" class="admin-container">
   <h2>All Quizzes</h2>
   <table class="admin-table">

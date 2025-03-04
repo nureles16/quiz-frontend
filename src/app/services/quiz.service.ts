@@ -165,4 +165,37 @@ export class QuizService {
     const url = `${this.apiUrl}/questions/${questionId}`;
     return this.http.delete<void>(url);
   }
+
+  addQuiz(newQuiz: Quizzes): Observable<Quizzes> {
+    const token = this.getToken();
+    if (!token) {
+      console.error('No token found in localStorage.');
+      return throwError(() => new Error('User is not authenticated.'));
+    }
+    const headers = this.createHeaders(token);
+    const url = `${this.apiUrl}/quizzes`;
+    return this.http.post<Quizzes>(url, newQuiz, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error adding quiz:', error);
+        return throwError(() => new Error('Failed to add quiz.'));
+      })
+    );
+  }
+
+  addQuestion(newQuestion: Question): Observable<Question> {
+    const token = this.getToken();
+    if (!token) {
+      console.error('No token found in localStorage.');
+      return throwError(() => new Error('User is not authenticated.'));
+    }
+    const headers = this.createHeaders(token);
+    const url = `${this.apiUrl}/questions`;
+    return this.http.post<Question>(url, newQuestion, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error adding question:', error);
+        return throwError(() => new Error('Failed to add question.'));
+      })
+    );
+  }
+
 }
